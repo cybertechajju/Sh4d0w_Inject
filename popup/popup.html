@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=400">
+  <title>Sh4d0w Inject</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="extension-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M3 14l5-5M3 14l5 5" stroke="#00ff41" stroke-width="2" stroke-linecap="round" />
+            <path d="M25 14l-5-5M25 14l-5 5" stroke="#00ff41" stroke-width="2" stroke-linecap="round" />
+            <circle cx="14" cy="11" r="5" stroke="#00ff41" stroke-width="1.5" fill="none" />
+            <circle cx="12" cy="10" r="1.2" fill="#00d4ff" />
+            <circle cx="16" cy="10" r="1.2" fill="#00ff41" opacity="0.5" />
+            <path d="M11 15h6l-1 4h-4z" stroke="#00ff41" stroke-width="1" fill="none" />
+            <path d="M12 17h4" stroke="#00ff41" stroke-width="0.8" />
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>Sh4d0w <span class="accent">Inject</span></h1>
+          <span class="version">v3.1</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="settingsBtn" class="icon-btn" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Header Injection Panel -->
+    <div class="header-injection-panel">
+      <div class="panel-header" id="panelToggle">
+        <span class="panel-title">🔀 Header Injection</span>
+        <span class="panel-count" id="headerCount">0 active</span>
+        <span class="panel-arrow" id="panelArrow">▼</span>
+      </div>
+      <div class="header-toggles" id="headerToggles">
+        <div class="header-toggle-item" data-header="user-agent">
+          <span class="ht-icon">🌐</span><span class="ht-label">User-Agent</span>
+          <button class="ht-switch" data-header="user-agent"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="referer">
+          <span class="ht-icon">🔗</span><span class="ht-label">Referer</span>
+          <button class="ht-switch" data-header="referer"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="origin">
+          <span class="ht-icon">📍</span><span class="ht-label">Origin</span>
+          <button class="ht-switch" data-header="origin"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="cookie">
+          <span class="ht-icon">🍪</span><span class="ht-label">Cookie</span>
+          <button class="ht-switch" data-header="cookie"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="accept">
+          <span class="ht-icon">📥</span><span class="ht-label">Accept</span>
+          <button class="ht-switch" data-header="accept"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="x-forwarded-for">
+          <span class="ht-icon">🔀</span><span class="ht-label">X-Forwarded-For</span>
+          <button class="ht-switch" data-header="x-forwarded-for"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item waf-bypass-item" data-header="waf-bypass">
+          <span class="ht-icon">🤐</span><span class="ht-label" title="Content-Encoding: gzip">WAF Bypass</span>
+          <button class="ht-switch" data-header="waf-bypass"><span class="ht-switch-text">OFF</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Server URL Setup Banner -->
+    <div class="server-banner" id="serverBanner">
+      <div class="server-banner-row" id="serverSetup">
+        <span class="server-label">🔗 Server:</span>
+        <input type="text" id="serverUrlInput" class="input-field server-input"
+          placeholder="Your blind XSS callback URL">
+        <button id="saveServerBtn" class="btn btn-accent btn-small">Save</button>
+      </div>
+      <div class="server-status" id="serverStatus"></div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="fill"><span class="tab-icon">💉</span><span>Fill</span></button>
+      <button class="tab" data-tab="recon"><span class="tab-icon">🔍</span><span>Recon</span></button>
+      <button class="tab" data-tab="exclude"><span class="tab-icon">🚫</span><span>Exclude</span></button>
+      <button class="tab" data-tab="history"><span class="tab-icon">📋</span><span>History</span></button>
+    </nav>
+
+    <!-- Fill Tab -->
+    <section class="tab-content active" id="tab-fill">
+      <div class="fill-actions">
+        <button id="scanBtn" class="btn btn-secondary btn-large">
+          <span class="btn-icon">🔎</span><span class="btn-text">Scan Page Fields</span>
+        </button>
+        <div class="field-summary" id="fieldSummary">
+          <p class="hint-text">Click Scan to detect fillable fields.</p>
+        </div>
+        <button id="fillAllBtn" class="btn btn-primary btn-large">
+          <span class="btn-icon">⚡</span><span class="btn-text">Fill All Fields</span>
+          <div class="btn-glow"></div>
+        </button>
+      </div>
+      <div class="fill-status" id="fillStatus" style="display:none;">
+        <div class="status-bar">
+          <div class="status-bar-fill" id="statusBarFill"></div>
+        </div>
+        <p class="status-text" id="statusText"></p>
+      </div>
+    </section>
+
+    <!-- Recon Tab -->
+    <section class="tab-content" id="tab-recon">
+      <div class="recon-input-section">
+        <div class="input-group">
+          <input type="text" id="targetDomain" class="input-field" placeholder="target domain (e.g. example.com)">
+          <button id="generateDorksBtn" class="btn btn-accent">🔍 Dorks</button>
+        </div>
+      </div>
+      <div class="dork-results" id="dorkResults">
+        <p class="hint-text">Enter a target domain to generate Google Dorks.</p>
+      </div>
+    </section>
+
+    <!-- Exclude Tab -->
+    <section class="tab-content" id="tab-exclude">
+      <div class="exclude-section">
+        <div class="input-group">
+          <input type="text" id="excludeDomainInput" class="input-field"
+            placeholder="Add domain to exclude (e.g. example.com)">
+          <button id="addExcludeBtn" class="btn btn-accent">➕ Add</button>
+        </div>
+        <p class="hint-text" style="margin-top:8px;font-size:11px;">Header injection will be <strong>skipped</strong>
+          for these domains.</p>
+        <div class="exclude-list" id="excludeList"></div>
+        <button id="resetExcludesBtn" class="btn btn-small btn-outline" style="margin-top:8px;">🔄 Reset to
+          Defaults</button>
+      </div>
+    </section>
+
+    <!-- History Tab -->
+    <section class="tab-content" id="tab-history">
+      <div class="history-list" id="historyList">
+        <p class="hint-text">No fill history yet.</p>
+      </div>
+      <button id="clearHistoryBtn" class="btn btn-small btn-danger" style="display:none;">🗑️ Clear</button>
+    </section>
+
+    <footer class="footer"><span>Sh4d0w Inject — Born in the Shadows 🖤</span></footer>
+  </div>
+  <script src="../lib/payloads.js"></script>
+  <script src="popup.js"></script>
+</body>
+
+</html>

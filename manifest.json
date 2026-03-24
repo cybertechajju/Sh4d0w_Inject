@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Sh4d0w Inject",
+  "version": "3.2.0",
+  "description": "Stealth blind XSS payload injector & recon tool — KEEP LEARNING KEEP HACKING. Auto-fill forms and inject into HTTP headers.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "contextMenus",
+    "scripting",
+    "declarativeNetRequest",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "options_page": "options/options.html",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "sh4d0w-inject@shadow",
+      "strict_min_version": "121.0"
+    }
+  }
+}
