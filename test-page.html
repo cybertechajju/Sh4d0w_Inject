@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlindXSS Hunter — Test Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p.desc {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .forms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-card h2 {
+            color: #444;
+            font-size: 18px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4a90d9;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            background: #4a90d9;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e0e7ef;
+            color: #4a5568;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧪 BlindXSS Hunter — Test Page</h1>
+    <p class="desc">This page contains various form types for testing the auto-fill functionality of the extension.</p>
+
+    <div class="forms-grid">
+        <!-- Contact Form -->
+        <div class="form-card">
+            <h2>📋 Contact Form</h2>
+            <form>
+                <div class="form-group">
+                    <label for="contact-name">Full Name <span class="badge">name</span></label>
+                    <input type="text" id="contact-name" name="fullname" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="contact-email">Email Address <span class="badge">email</span></label>
+                    <input type="email" id="contact-email" name="email" placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="contact-phone">Phone Number <span class="badge">phone</span></label>
+                    <input type="tel" id="contact-phone" name="phone" placeholder="+1 234 567 890">
+                </div>
+                <div class="form-group">
+                    <label for="contact-subject">Subject <span class="badge">subject</span></label>
+                    <input type="text" id="contact-subject" name="subject" placeholder="Inquiry about...">
+                </div>
+                <div class="form-group">
+                    <label for="contact-message">Message <span class="badge">message</span></label>
+                    <textarea id="contact-message" name="message" placeholder="Your message here..."></textarea>
+                </div>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+        <!-- Feedback Form -->
+        <div class="form-card">
+            <h2>💬 Feedback Form</h2>
+            <form>
+                <div class="form-group">
+                    <label for="feedback-name">Your Name <span class="badge">name</span></label>
+                    <input type="text" id="feedback-name" name="name" placeholder="Jane Smith">
+                </div>
+                <div class="form-group">
+                    <label for="feedback-email">Email <span class="badge">email</span></label>
+                    <input type="email" id="feedback-email" name="email" placeholder="jane@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="feedback-company">Company <span class="badge">company</span></label>
+                    <input type="text" id="feedback-company" name="company" placeholder="Company name">
+                </div>
+                <div class="form-group">
+                    <label for="feedback-text">Feedback <span class="badge">message</span></label>
+                    <textarea id="feedback-text" name="feedback" placeholder="Share your feedback..."></textarea>
+                </div>
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+        <!-- Support Ticket -->
+        <div class="form-card">
+            <h2>🎫 Support Ticket</h2>
+            <form>
+                <div class="form-group">
+                    <label for="ticket-name">Name <span class="badge">name</span></label>
+                    <input type="text" id="ticket-name" name="username" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="ticket-email">Email <span class="badge">email</span></label>
+                    <input type="email" id="ticket-email" name="email" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="ticket-url">Website URL <span class="badge">url</span></label>
+                    <input type="url" id="ticket-url" name="website" placeholder="https://example.com">
+                </div>
+                <div class="form-group">
+                    <label for="ticket-title">Issue Title <span class="badge">subject</span></label>
+                    <input type="text" id="ticket-title" name="title" placeholder="Brief description of issue">
+                </div>
+                <div class="form-group">
+                    <label for="ticket-desc">Description <span class="badge">message</span></label>
+                    <textarea id="ticket-desc" name="description"
+                        placeholder="Describe your issue in detail..."></textarea>
+                </div>
+                <button type="submit">Create Ticket</button>
+            </form>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="form-card">
+            <h2>📝 Registration Form</h2>
+            <form>
+                <div class="form-group">
+                    <label for="reg-firstname">First Name <span class="badge">name</span></label>
+                    <input type="text" id="reg-firstname" name="firstname" placeholder="First name">
+                </div>
+                <div class="form-group">
+                    <label for="reg-lastname">Last Name <span class="badge">name</span></label>
+                    <input type="text" id="reg-lastname" name="lastname" placeholder="Last name">
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email <span class="badge">email</span></label>
+                    <input type="email" id="reg-email" name="email" placeholder="email@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="reg-phone">Mobile <span class="badge">phone</span></label>
+                    <input type="tel" id="reg-phone" name="mobile" placeholder="+91...">
+                </div>
+                <div class="form-group">
+                    <label for="reg-company">Organization <span class="badge">company</span></label>
+                    <input type="text" id="reg-company" name="organization" placeholder="Your organization">
+                </div>
+                <div class="form-group">
+                    <label for="reg-address">Address <span class="badge">address</span></label>
+                    <input type="text" id="reg-address" name="address" placeholder="Your address">
+                </div>
+                <div class="form-group">
+                    <label for="reg-bio">Bio <span class="badge">message</span></label>
+                    <textarea id="reg-bio" name="bio" placeholder="Tell us about yourself..."></textarea>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+
+        <!-- Comment Box -->
+        <div class="form-card">
+            <h2>💭 Comment Section</h2>
+            <form>
+                <div class="form-group">
+                    <label for="comment-author">Author Name <span class="badge">name</span></label>
+                    <input type="text" id="comment-author" name="author" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label for="comment-email">Email <span class="badge">email</span></label>
+                    <input type="email" id="comment-email" name="email" placeholder="email@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="comment-website">Website <span class="badge">url</span></label>
+                    <input type="url" id="comment-website" name="url" placeholder="https://yoursite.com">
+                </div>
+                <div class="form-group">
+                    <label for="comment-text">Comment <span class="badge">message</span></label>
+                    <textarea id="comment-text" name="comment" placeholder="Write your comment..."></textarea>
+                </div>
+                <button type="submit">Post Comment</button>
+            </form>
+        </div>
+
+        <!-- Search + Generic -->
+        <div class="form-card">
+            <h2>🔍 Search & Misc</h2>
+            <form>
+                <div class="form-group">
+                    <label for="search-q">Search <span class="badge">search</span></label>
+                    <input type="search" id="search-q" name="q" placeholder="Search...">
+                </div>
+                <div class="form-group">
+                    <label for="misc-input1">Custom Field 1 <span class="badge">generic</span></label>
+                    <input type="text" id="misc-input1" name="custom1" placeholder="Some data">
+                </div>
+                <div class="form-group">
+                    <label for="misc-input2">Custom Field 2 <span class="badge">generic</span></label>
+                    <input type="text" id="misc-input2" name="custom2" placeholder="More data">
+                </div>
+                <div class="form-group">
+                    <label>Content Editable <span class="badge">message</span></label>
+                    <div contenteditable="true"
+                        style="min-height: 60px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;"
+                        id="editable-content">Click to edit...</div>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

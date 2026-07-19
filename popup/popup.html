@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=400">
+  <title>Sh4d0w Inject</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="scanline-overlay"></div>
+  <div class="extension-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-glow"></div>
+      <div class="logo-section">
+        <div class="logo-icon">
+          <div class="logo-pulse"></div>
+          <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+            <path d="M3 14l5-5M3 14l5 5" stroke="#00ff41" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M25 14l-5-5M25 14l-5 5" stroke="#00ff41" stroke-width="2.5" stroke-linecap="round" />
+            <circle cx="14" cy="11" r="5" stroke="#00ff41" stroke-width="1.5" fill="none" />
+            <circle cx="12" cy="10" r="1.2" fill="#00d4ff" />
+            <circle cx="16" cy="10" r="1.2" fill="#00ff41" opacity="0.5" />
+            <path d="M11 15h6l-1 4h-4z" stroke="#00ff41" stroke-width="1" fill="none" />
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>SH4D0W <span class="accent">INJECT</span></h1>
+          <div class="version-row">
+            <span class="version">v4.0</span>
+            <span class="version-tag">PRO</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="settingsBtn" class="icon-btn" title="Settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Live Stats Bar -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-item">
+        <span class="stat-value glow-green" id="statHeaders">0</span>
+        <span class="stat-label">HEADERS</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value glow-cyan" id="statPayloads">0</span>
+        <span class="stat-label">PAYLOADS</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value glow-purple" id="statSites">0</span>
+        <span class="stat-label">SITES</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value glow-red" id="statFills">0</span>
+        <span class="stat-label">FILLS</span>
+      </div>
+    </div>
+
+    <!-- Header Injection Panel -->
+    <div class="header-injection-panel">
+      <div class="panel-header" id="panelToggle">
+        <div class="panel-left">
+          <span class="panel-indicator"></span>
+          <span class="panel-title">HEADER INJECTION</span>
+        </div>
+        <div class="panel-right">
+          <span class="panel-count" id="headerCount">0 active</span>
+          <span class="panel-arrow" id="panelArrow">▾</span>
+        </div>
+      </div>
+
+      <!-- Master Switch -->
+      <div class="master-switch-row" id="masterSwitchRow">
+        <button id="masterOnBtn" class="btn btn-master-on">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          ALL ON
+        </button>
+        <button id="masterOffBtn" class="btn btn-master-off">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          ALL OFF
+        </button>
+      </div>
+
+      <div class="header-toggles" id="headerToggles">
+        <!-- Original headers -->
+        <div class="header-toggle-item" data-header="user-agent">
+          <span class="ht-dot"></span><span class="ht-label">User-Agent</span>
+          <button class="ht-switch" data-header="user-agent"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="referer">
+          <span class="ht-dot"></span><span class="ht-label">Referer</span>
+          <button class="ht-switch" data-header="referer"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="origin">
+          <span class="ht-dot"></span><span class="ht-label">Origin</span>
+          <button class="ht-switch" data-header="origin"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="cookie">
+          <span class="ht-dot"></span><span class="ht-label">Cookie</span>
+          <button class="ht-switch" data-header="cookie"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="accept">
+          <span class="ht-dot"></span><span class="ht-label">Accept</span>
+          <button class="ht-switch" data-header="accept"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="x-forwarded-for">
+          <span class="ht-dot"></span><span class="ht-label">X-Forwarded-For</span>
+          <button class="ht-switch" data-header="x-forwarded-for"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item waf-bypass-item" data-header="waf-bypass">
+          <span class="ht-dot"></span><span class="ht-label" title="Content-Encoding: gzip">WAF Bypass</span>
+          <button class="ht-switch" data-header="waf-bypass"><span class="ht-switch-text">OFF</span></button>
+        </div>
+
+        <!-- v4.0 New Headers -->
+        <div class="header-section-divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">NEW</span>
+          <span class="divider-line"></span>
+        </div>
+        <div class="header-toggle-item" data-header="x-real-ip">
+          <span class="ht-dot"></span><span class="ht-label">X-Real-IP</span>
+          <button class="ht-switch" data-header="x-real-ip"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="true-client-ip">
+          <span class="ht-dot"></span><span class="ht-label">True-Client-IP</span>
+          <button class="ht-switch" data-header="true-client-ip"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="x-client-ip">
+          <span class="ht-dot"></span><span class="ht-label">X-Client-IP</span>
+          <button class="ht-switch" data-header="x-client-ip"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="x-originating-ip">
+          <span class="ht-dot"></span><span class="ht-label">X-Originating-IP</span>
+          <button class="ht-switch" data-header="x-originating-ip"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="contact">
+          <span class="ht-dot"></span><span class="ht-label">Contact</span>
+          <button class="ht-switch" data-header="contact"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="from">
+          <span class="ht-dot"></span><span class="ht-label">From</span>
+          <button class="ht-switch" data-header="from"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="x-wap-profile">
+          <span class="ht-dot"></span><span class="ht-label">X-Wap-Profile</span>
+          <button class="ht-switch" data-header="x-wap-profile"><span class="ht-switch-text">OFF</span></button>
+        </div>
+        <div class="header-toggle-item" data-header="x-custom-ip-authorization">
+          <span class="ht-dot"></span><span class="ht-label" title="X-Custom-IP-Authorization">X-Custom-IP-Auth</span>
+          <button class="ht-switch" data-header="x-custom-ip-authorization"><span class="ht-switch-text">OFF</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Server URL -->
+    <div class="server-banner" id="serverBanner">
+      <div class="server-banner-row" id="serverSetup">
+        <span class="server-label">CALLBACK</span>
+        <input type="text" id="serverUrlInput" class="input-field server-input"
+          placeholder="https://your-id.xss.ht">
+        <button id="saveServerBtn" class="btn btn-accent btn-small">SAVE</button>
+      </div>
+      <div class="server-status" id="serverStatus"></div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="fill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        <span>INJECT</span>
+      </button>
+      <button class="tab" data-tab="recon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span>RECON</span>
+      </button>
+      <button class="tab" data-tab="exclude">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        <span>SCOPE</span>
+      </button>
+      <button class="tab" data-tab="history">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span>LOG</span>
+      </button>
+    </nav>
+
+    <!-- Fill Tab -->
+    <section class="tab-content active" id="tab-fill">
+      <div class="fill-actions">
+        <button id="scanBtn" class="btn btn-scan btn-large">
+          <span class="btn-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </span>
+          <span class="btn-text">SCAN FIELDS</span>
+        </button>
+        <div class="field-summary" id="fieldSummary">
+          <p class="hint-text">Scan current page to detect injectable fields.</p>
+        </div>
+        <button id="fillAllBtn" class="btn btn-inject btn-large">
+          <span class="btn-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </span>
+          <span class="btn-text">INJECT ALL</span>
+          <div class="btn-glow"></div>
+        </button>
+      </div>
+      <div class="fill-status" id="fillStatus" style="display:none;">
+        <div class="status-bar">
+          <div class="status-bar-fill" id="statusBarFill"></div>
+        </div>
+        <p class="status-text" id="statusText"></p>
+      </div>
+    </section>
+
+    <!-- Recon Tab -->
+    <section class="tab-content" id="tab-recon">
+      <div class="recon-input-section">
+        <div class="input-group">
+          <input type="text" id="targetDomain" class="input-field" placeholder="target.com">
+          <button id="generateDorksBtn" class="btn btn-accent">DORK IT</button>
+        </div>
+      </div>
+      <div class="dork-results" id="dorkResults">
+        <p class="hint-text">Enter a target domain to generate recon dorks.</p>
+      </div>
+    </section>
+
+    <!-- Exclude Tab -->
+    <section class="tab-content" id="tab-exclude">
+      <div class="exclude-section">
+        <div class="input-group">
+          <input type="text" id="excludeDomainInput" class="input-field"
+            placeholder="*.example.com">
+          <button id="addExcludeBtn" class="btn btn-accent">ADD</button>
+        </div>
+        <p class="hint-text" style="margin-top:8px;font-size:10px;">Headers will be <strong>skipped</strong>
+          for these domains. Wildcards supported: <strong>*.domain.com</strong></p>
+        <div class="exclude-list" id="excludeList"></div>
+        <button id="resetExcludesBtn" class="btn btn-small btn-outline" style="margin-top:8px;">RESET DEFAULTS</button>
+      </div>
+    </section>
+
+    <!-- History Tab -->
+    <section class="tab-content" id="tab-history">
+      <div class="history-list" id="historyList">
+        <p class="hint-text">No injection log yet.</p>
+      </div>
+      <button id="clearHistoryBtn" class="btn btn-small btn-danger" style="display:none;">CLEAR LOG</button>
+    </section>
+
+    <footer class="footer">
+      <span class="footer-text">SH4D0W INJECT v4.0</span>
+      <span class="footer-tag">BORN IN THE SHADOWS</span>
+    </footer>
+  </div>
+  <script src="../lib/payloads.js"></script>
+  <script src="popup.js"></script>
+</body>
+
+</html>
