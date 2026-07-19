@@ -220,14 +220,6 @@ Page loads → Content script scans for known chatbot iframes
 
 ---
 
-## 📺 Video Tutorial
-
-Watch the full tutorial on how to configure and use Sh4d0w Inject:
-
-[![Sh4d0w Inject Tutorial](https://img.youtube.com/vi/oSI7V8fkMHo/0.jpg)](https://www.youtube.com/live/oSI7V8fkMHo?si=7c-36h3YrO0cBC6v)
-
----
-
 ## 🛣️ Roadmap
 
 - [x] 15 injectable HTTP headers
